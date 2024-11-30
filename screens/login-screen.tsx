@@ -1,16 +1,27 @@
-import { Button, Text, TextInput, View, TouchableOpacity, StyleSheet, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from "react-native";
+import { Text, TextInput, View, TouchableOpacity, StyleSheet, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from "react-native";
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { firebaseAuth } from "./../services/auth/firebase-config";
+import { useLoggedIn } from "./../services/auth/auth-context";
 
 export default function LoginScreen() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation();
+    const { setIsLoggedIn } = useLoggedIn();
 
     const handleSignIn = () => {
         console.log('Email:', email);
         console.log('Password:', password);
+        signInWithEmailAndPassword(firebaseAuth, email, password)
+            .then((res) => {
+                console.log("successful");
+                setIsLoggedIn(res.user);
+            }).catch((err) => {
+                console.log(err);
+            })
     };
 
     return (

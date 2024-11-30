@@ -1,11 +1,14 @@
-import { Text, View, TextInput, TouchableOpacity, StyleSheet, Button, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from "react-native";
+import { Text, View, TextInput, TouchableOpacity, StyleSheet, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
+import { firebaseAuth } from "./../services/auth/firebase-config";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function SignupScreen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+
     const navigation = useNavigation();
     const handleSignUp = () => {
         if (password !== confirmPassword) {
@@ -13,9 +16,15 @@ export default function SignupScreen() {
             return;
         }
 
-        // Add your sign-up logic here
         console.log('Email:', email);
         console.log('Password:', password);
+
+        createUserWithEmailAndPassword(firebaseAuth, email, password).then((res: any) => {
+            console.log("successful", res.user);
+            navigation.navigate('Login');
+        }).catch((err: any) => {
+            console.log(err);
+        })
     };
     return (
         <KeyboardAvoidingView
