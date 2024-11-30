@@ -5,7 +5,7 @@ import SignUpScreen from "../screens/signup-screen";
 
 const Stack = createNativeStackNavigator();
 
-const GuestStack = () => {
+export default function AuthStack() {
     return (
         <Stack.Navigator>
             <Stack.Screen
@@ -21,5 +21,3 @@ const GuestStack = () => {
         </Stack.Navigator>
     );
 };
-
-export default GuestStack;
