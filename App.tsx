@@ -8,8 +8,8 @@ import HomeTabStack from './navigation/home-tab-stack';
 export default function App() {
   return (
     <NavigationContainer>
-      <HomeTabStack />
-      {/* <AuthStack /> */}
+      {/* <HomeTabStack /> */}
+      <AuthStack />
     </NavigationContainer>
   );
 }
