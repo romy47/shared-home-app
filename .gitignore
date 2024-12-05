@@ -37,3 +37,6 @@ GoogleService-Info.plist
 
 # typescript
 *.tsbuildinfo
+
+android/
+ios/
