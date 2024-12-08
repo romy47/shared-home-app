@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import GuestStack from './navigation/auth-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthStack from './navigation/auth-stack';
-import DrawerStack from './navigation/drawer-stack';
 import HomeTabStack from './navigation/home-tab-stack';
-import { LoggedInProvider, useLoggedIn } from './services/auth/auth-context';
 import auth from '@react-native-firebase/auth';
 
 const AppNavigator = () => {
@@ -14,8 +11,18 @@ const AppNavigator = () => {
   
     // Handle user state changes
     function onAuthStateChanged(user: any) {
-      setUser(user);
+      if (user) {
+        if (user.emailVerified === true) {
+          console.log('email is verified');
+          setUser(user);
+        } else {
+          console.log('email is not verified');
+        }
+      } else {
+        setUser(user);
+      }
       if (initializing) setInitializing(false);
+
     }
   
     useEffect(() => {
@@ -25,7 +32,6 @@ const AppNavigator = () => {
   
     if (initializing) return null;
 
-  const { isLoggedIn } = useLoggedIn();
   return (
     <NavigationContainer>
       {user ? <HomeTabStack /> : <AuthStack />}
@@ -35,9 +41,7 @@ const AppNavigator = () => {
 
 const App = () => {
   return (
-    <LoggedInProvider>
       <AppNavigator />
-    </LoggedInProvider>
   );
 };
 

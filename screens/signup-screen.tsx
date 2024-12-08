@@ -1,8 +1,6 @@
 import { Text, View, TextInput, TouchableOpacity, StyleSheet, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
-import { firebaseAuth } from "./../services/auth/firebase-config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { AppleButton, appleAuth } from '@invertase/react-native-apple-authentication';
 import auth from '@react-native-firebase/auth';
 
@@ -43,10 +41,17 @@ export default function SignupScreen() {
         console.log('Email:', email);
         console.log('Password:', password);
 
-        createUserWithEmailAndPassword(firebaseAuth, email, password).then((res: any) => {
-            console.log("successful", res.user);
-            navigation.navigate('Login');
-        }).catch((err: any) => {
+        return auth().createUserWithEmailAndPassword(email, password).then((res) => {
+            console.log("successful: user created", res);
+            console.log("Sending varrification enail");
+            res.user.sendEmailVerification().then((res2)=>{
+                console.log("email verification sent to user: ", res2);
+              }).catch((err2)=> {
+                console.log("error email verification: ", err2);
+              }).then(()=>{
+                auth().signOut()
+              });
+        }).catch((err) => {
             console.log(err);
         })
     };
